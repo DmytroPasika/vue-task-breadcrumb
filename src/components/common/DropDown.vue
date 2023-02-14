@@ -13,7 +13,14 @@
     >
       <div v-for="item in list" :key="item.id" class="drop-down__item-wrapper">
         <div class="drop-down__item" @click="setSelectItem(item)">
-          {{ item.title }}
+          <div>
+            {{ item.title }}
+          </div>
+          <icon
+            v-if="item.subGroup.length"
+            class="drop-down__icon"
+            icon="fa-arrow-right"
+          />
         </div>
         <custom-select
           v-if="item.subGroup.length && isItemSelected(item)"
@@ -103,6 +110,8 @@ export default defineComponent({
   padding-left: 4px;
 }
 .drop-down__item {
+  display: flex;
+  justify-content: center;
   border: 1px solid purple;
   height: fit-content;
   margin-top: 4px;
