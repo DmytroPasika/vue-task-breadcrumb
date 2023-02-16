@@ -1,24 +1,17 @@
 <template>
   <div class="main-page">
-    <bread-crumbs />
+    <navigation-bar />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import BreadCrumbs from "@/components/BreadCrumbs.vue";
+import NavigationBar from "@/components/NavigationBar.vue";
 
 export default defineComponent({
   name: "MainPage",
   components: {
-    BreadCrumbs,
+    NavigationBar,
   },
 });
 </script>
-
-<style leng="less" scoped>
-.main-page {
-  display: flex;
-  justify-content: center;
-}
-</style>
