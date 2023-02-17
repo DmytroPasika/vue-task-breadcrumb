@@ -1,17 +1,56 @@
 <template>
-  <div class="navigation-bar" ref="perenRoot">
-    <list-component title="list #1.0" @click="onSelectItem">
-      <list-item title="item #1.1" />
-      <list-item title="item #1.2" />
-      <list-component title="list #2.0">
-        <list-item title="item #2.1" />
-        <list-item title="item #2.2" />
-        <list-item title="item #2.3" />
-        <list-component title="list #3.0">
-          <list-item title="item #3.1" />
-          <list-item title="item #3.2" />
+  <div class="navigation-bar">
+    <list-component title="list #1.0" :on-select-item="onSetPath">
+      <template #default="{ onSelectItem }: { onSelectItem: CallableFunction }">
+        <list-item title="item #1.1" :on-select-item="onSelectItem" />
+        <list-item title="item #1.2" :on-select-item="onSelectItem" />
+        <list-component title="list #2.0" :on-select-item="onSelectItem">
+          <template
+            #default="{ onSelectItem }: { onSelectItem: CallableFunction }"
+          >
+            <list-item title="item #2.1" :on-select-item="onSelectItem" />
+            <list-item title="item #2.2" :on-select-item="onSelectItem" />
+            <list-item title="item #2.3" :on-select-item="onSelectItem" />
+            <list-component title="list #3.0" :on-select-item="onSelectItem">
+              <template
+                #default="{ onSelectItem }: { onSelectItem: CallableFunction }"
+              >
+                <list-item title="item #3.1" :on-select-item="onSelectItem" />
+                <list-item title="item #3.2" :on-select-item="onSelectItem" />
+                <list-component
+                  title="list #4.0"
+                  :on-select-item="onSelectItem"
+                >
+                  <template
+                    #default="{
+                      onSelectItem,
+                    }: {
+                      onSelectItem: CallableFunction,
+                    }"
+                  >
+                    <list-item
+                      title="item #4.1"
+                      :on-select-item="onSelectItem"
+                    />
+                    <list-item
+                      title="item #4.2"
+                      :on-select-item="onSelectItem"
+                    />
+                    <list-item
+                      title="item #4.3"
+                      :on-select-item="onSelectItem"
+                    />
+                    <list-item
+                      title="item #4.4"
+                      :on-select-item="onSelectItem"
+                    />
+                  </template>
+                </list-component>
+              </template>
+            </list-component>
+          </template>
         </list-component>
-      </list-component>
+      </template>
     </list-component>
   </div>
   <div v-if="path.length">
@@ -31,26 +70,13 @@ export default defineComponent({
     ListItem,
   },
   setup() {
-    const perenRoot = ref(null);
     const path = ref("");
-    function onSelectItem(e: any) {
-      if (!e.target) return;
-      const elementPath = [];
-      let node = e.target;
-      while (node !== perenRoot.value) {
-        if (node.hasAttribute("navigationItem")) {
-          elementPath.unshift(node);
-        }
-        node = node?.parentNode;
-      }
-      path.value = elementPath
-        .map((e) => {
-          return e.getAttribute("itemValue");
-        })
-        .join(" -> ");
+
+    function onSetPath(elementPath: string[]) {
+      path.value = elementPath.join(" -> ");
     }
 
-    return { path, onSelectItem, perenRoot };
+    return { path, onSetPath };
   },
 });
 </script>

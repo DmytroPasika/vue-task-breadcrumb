@@ -1,5 +1,5 @@
 <template>
-  <li :navigationItem="true" :itemValue="title">{{ title }}</li>
+  <li @click="onClickItem">{{ title }}</li>
 </template>
 
 <script lang="ts">
@@ -13,6 +13,20 @@ export default defineComponent({
       type: String as PropType<string>,
       required: true,
     },
+    onSelectItem: {
+      type: Function as PropType<CallableFunction>,
+      default: () => {
+        undefined;
+      },
+    },
+  },
+  setup(props) {
+    function onClickItem(event: MouseEvent) {
+      if (event.target instanceof Element) {
+        props.onSelectItem([event.target.innerHTML]);
+      }
+    }
+    return { onClickItem };
   },
 });
 </script>

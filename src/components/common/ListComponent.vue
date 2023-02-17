@@ -1,10 +1,8 @@
-<template #default="{ scope }">
-  <div class="list">
-    <p :navigationItem="true" :itemValue="title">{{ title }}</p>
-    <ul :navigationItem="true" :itemValue="title">
-      <slot />
-    </ul>
-  </div>
+<template>
+  <p @click="onSelectList(`${title}`)">{{ title }}</p>
+  <ul>
+    <slot :on-select-item="onSelectListItem" />
+  </ul>
 </template>
 
 <script lang="ts">
@@ -17,6 +15,22 @@ export default defineComponent({
       type: String as PropType<string>,
       require: true,
     },
+    onSelectItem: {
+      type: Function as PropType<CallableFunction>,
+      default: () => {
+        undefined;
+      },
+    },
+  },
+  setup(props) {
+    function onSelectListItem(path: string[]) {
+      props.onSelectItem([props.title, ...path]);
+    }
+
+    function onSelectList(list: string) {
+      props.onSelectItem([list]);
+    }
+    return { onSelectList, onSelectListItem };
   },
 });
 </script>
