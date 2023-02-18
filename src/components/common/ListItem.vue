@@ -7,24 +7,16 @@ import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
   name: "ListItem",
-  components: {},
+  emits: ["select"],
   props: {
     title: {
       type: String as PropType<string>,
       required: true,
     },
-    onSelectItem: {
-      type: Function as PropType<CallableFunction>,
-      default: () => {
-        undefined;
-      },
-    },
   },
-  setup(props) {
-    function onClickItem(event: MouseEvent) {
-      if (event.target instanceof Element) {
-        props.onSelectItem([event.target.innerHTML]);
-      }
+  setup(props, { emit }) {
+    function onClickItem() {
+      emit("select", [props.title]);
     }
     return { onClickItem };
   },

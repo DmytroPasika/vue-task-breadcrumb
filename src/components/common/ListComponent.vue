@@ -1,7 +1,11 @@
 <template>
   <p @click="onSelectList(`${title}`)">{{ title }}</p>
   <ul>
-    <slot :on-select-item="onSelectListItem" />
+    <slot
+      :on="{
+        select: onSelectListItem,
+      }"
+    />
   </ul>
 </template>
 
@@ -10,25 +14,22 @@ import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
   name: "ListComponent",
+  emits: ["on-select-item", "select"],
   props: {
     title: {
       type: String as PropType<string>,
       require: true,
     },
-    onSelectItem: {
-      type: Function as PropType<CallableFunction>,
-      default: () => {
-        undefined;
-      },
-    },
   },
-  setup(props) {
+  setup(props, { emit }) {
     function onSelectListItem(path: string[]) {
-      props.onSelectItem([props.title, ...path]);
+      emit("on-select-item", [props.title, ...path]);
+      emit("select", [props.title, ...path]);
     }
 
     function onSelectList(list: string) {
-      props.onSelectItem([list]);
+      emit("on-select-item", [list]);
+      emit("select", [list]);
     }
     return { onSelectList, onSelectListItem };
   },
